@@ -1,3 +1,6 @@
+// ===== Global variables =====
+let modal = null;
+
 // ===== Wait for DOM to be ready =====
 document.addEventListener('DOMContentLoaded', function() {
     initializeApp();
@@ -46,7 +49,7 @@ function initializeApp() {
     });
 
     // ===== Modal Management =====
-    const modal = document.getElementById('experimentModal');
+    modal = document.getElementById('experimentModal');
     const closeModal = document.querySelector('.close-modal');
     const experimentCards = document.querySelectorAll('.experiment-card');
 
@@ -59,12 +62,14 @@ function initializeApp() {
         });
     }
 
-    window.addEventListener('click', (e) => {
-        if (e.target === modal) {
-            modal.style.display = 'none';
-            stopAllAnimations();
-        }
-    });
+    if (modal) {
+        window.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+                stopAllAnimations();
+            }
+        });
+    }
 
     // Handle clicks on experiment cards and buttons
     experimentCards.forEach(card => {
@@ -108,8 +113,17 @@ function showAbout() {
 }
 
 function openExperiment(type) {
-    modal.style.display = 'block';
+    if (!modal) {
+        modal = document.getElementById('experimentModal');
+    }
+    if (modal) {
+        modal.style.display = 'block';
+    }
     const container = document.getElementById('experimentContainer');
+    if (!container) {
+        console.error('Experiment container not found');
+        return;
+    }
     
     switch(type) {
         case 'gravity':
