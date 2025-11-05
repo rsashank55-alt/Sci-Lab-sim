@@ -706,6 +706,17 @@ body {
     color: var(--text-secondary);
 }
 
+.footer p {
+    margin: 0.3rem 0;
+}
+
+.footer .author-credit {
+    color: #ef4444;
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin-top: 0.5rem;
+}
+
 /* ===== Responsive Design ===== */
 @media (max-width: 768px) {
     .home-container {
