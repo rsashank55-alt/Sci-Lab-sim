@@ -1217,7 +1217,7 @@ function initPHExperiment() {
         return phColors[Math.round(ph)] || '#ffff00';
     }
     
-    function drawPHScale(ph) {
+    function drawPHScale(ph, showIndicator = false) {
         canvas.innerHTML = '';
         const scaleWidth = canvas.offsetWidth - 100;
         const scaleHeight = 60;
@@ -1252,25 +1252,34 @@ function initPHExperiment() {
             }
         }
         
-        // Indicator
-        const indicatorX = startX + (ph / 14) * scaleWidth;
-        const indicator = document.createElement('div');
-        indicator.style.position = 'absolute';
-        indicator.style.left = (indicatorX - 10) + 'px';
-        indicator.style.top = (startY - 20) + 'px';
-        indicator.style.width = '20px';
-        indicator.style.height = '20px';
-        indicator.style.background = getPHColor(ph);
-        indicator.style.borderRadius = '50%';
-        indicator.style.border = '3px solid #ffffff';
-        indicator.style.boxShadow = '0 0 20px ' + getPHColor(ph);
-        indicator.style.animation = 'pulse 1s ease-in-out infinite';
-        canvas.appendChild(indicator);
+        // Only show indicator when showIndicator is true
+        if (showIndicator) {
+            const indicatorX = startX + (ph / 14) * scaleWidth;
+            const indicator = document.createElement('div');
+            indicator.style.position = 'absolute';
+            indicator.style.left = (indicatorX - 10) + 'px';
+            indicator.style.top = (startY - 20) + 'px';
+            indicator.style.width = '20px';
+            indicator.style.height = '20px';
+            indicator.style.background = getPHColor(ph);
+            indicator.style.borderRadius = '50%';
+            indicator.style.border = '3px solid #ffffff';
+            indicator.style.boxShadow = '0 0 20px ' + getPHColor(ph);
+            indicator.style.animation = 'pulse 1s ease-in-out infinite';
+            canvas.appendChild(indicator);
+        }
     }
+    
+    // Don't show indicator when selecting substance
+    phSubstance.addEventListener('change', () => {
+        // Just update the scale without indicator
+        drawPHScale(7, false);
+        infoDiv.innerHTML = '';
+    });
     
     testBtn.addEventListener('click', () => {
         const ph = parseInt(phSubstance.value);
-        drawPHScale(ph);
+        drawPHScale(ph, true); // Show indicator when testing
         
         let description = '';
         if (ph < 7) {
@@ -1290,7 +1299,7 @@ function initPHExperiment() {
         `;
     });
     
-    drawPHScale(7);
+    drawPHScale(7, false); // Initial draw without indicator
 }
 
 // ===== Light Refraction Experiment =====
@@ -1371,45 +1380,70 @@ function initRefractionExperiment() {
         ctx.lineTo(canvas.width, interfaceY);
         ctx.stroke();
         
-        // Draw incident ray
+        // Draw light source (on the left side)
+        const lightSourceX = 50;
+        const lightSourceY = centerY;
+        ctx.fillStyle = '#fbbf24';
+        ctx.beginPath();
+        ctx.arc(lightSourceX, lightSourceY, 15, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.shadowBlur = 20;
+        ctx.shadowColor = '#fbbf24';
+        ctx.fill();
+        ctx.shadowBlur = 0;
+        
+        // Draw incident ray from light source
         const rayLength = 200;
-        const startX = centerX - 250;
-        const startY = centerY - rayLength * Math.sin(angleIncident);
+        const startX = lightSourceX;
+        const startY = lightSourceY;
+        
+        // Calculate where ray hits interface
+        const rayDistance = centerX - startX;
+        const rayEndY = startY - Math.tan(angleIncident) * rayDistance;
         
         ctx.strokeStyle = '#fbbf24';
         ctx.lineWidth = 3;
         ctx.beginPath();
         ctx.moveTo(startX, startY);
-        ctx.lineTo(centerX, centerY);
+        ctx.lineTo(centerX, rayEndY);
         ctx.stroke();
         
-        // Draw arrow
+        // Draw arrow on incident ray
         ctx.fillStyle = '#fbbf24';
+        const arrowAngle = Math.atan2(rayEndY - startY, centerX - startX);
+        const arrowX = centerX - 15 * Math.cos(arrowAngle);
+        const arrowY = rayEndY - 15 * Math.sin(arrowAngle);
         ctx.beginPath();
-        ctx.moveTo(centerX - 20, centerY - 20);
-        ctx.lineTo(centerX, centerY);
-        ctx.lineTo(centerX - 10, centerY - 15);
+        ctx.moveTo(arrowX - 8 * Math.cos(arrowAngle - Math.PI / 6), arrowY - 8 * Math.sin(arrowAngle - Math.PI / 6));
+        ctx.lineTo(arrowX, arrowY);
+        ctx.lineTo(arrowX - 8 * Math.cos(arrowAngle + Math.PI / 6), arrowY - 8 * Math.sin(arrowAngle + Math.PI / 6));
         ctx.fill();
         
         // Calculate refracted angle using Snell's law
-        const sinRefracted = (n1 / n2) * Math.sin(angleIncident);
-        const angleRefracted = Math.asin(Math.min(1, sinRefracted));
+        const actualAngle = Math.atan2(startY - rayEndY, centerX - startX);
+        const sinRefracted = (n1 / n2) * Math.sin(actualAngle);
+        const angleRefracted = Math.asin(Math.min(1, Math.abs(sinRefracted)));
         
-        // Draw refracted ray
+        // Draw refracted ray (going down into material)
+        const refractedRayLength = rayLength;
+        const refractedEndX = centerX + refractedRayLength * Math.cos(angleRefracted);
+        const refractedEndY = rayEndY + refractedRayLength * Math.sin(angleRefracted);
+        
         ctx.strokeStyle = '#ec4899';
         ctx.beginPath();
-        ctx.moveTo(centerX, centerY);
-        const endX = centerX + rayLength * Math.cos(angleRefracted);
-        const endY = centerY + rayLength * Math.sin(angleRefracted);
-        ctx.lineTo(endX, endY);
+        ctx.moveTo(centerX, rayEndY);
+        ctx.lineTo(refractedEndX, refractedEndY);
         ctx.stroke();
         
-        // Draw arrow
+        // Draw arrow on refracted ray
         ctx.fillStyle = '#ec4899';
+        const refractedArrowAngle = Math.atan2(refractedEndY - rayEndY, refractedEndX - centerX);
+        const refractedArrowX = refractedEndX - 15 * Math.cos(refractedArrowAngle);
+        const refractedArrowY = refractedEndY - 15 * Math.sin(refractedArrowAngle);
         ctx.beginPath();
-        ctx.moveTo(endX - 10, endY - 5);
-        ctx.lineTo(endX, endY);
-        ctx.lineTo(endX - 5, endY - 10);
+        ctx.moveTo(refractedArrowX - 8 * Math.cos(refractedArrowAngle - Math.PI / 6), refractedArrowY - 8 * Math.sin(refractedArrowAngle - Math.PI / 6));
+        ctx.lineTo(refractedArrowX, refractedArrowY);
+        ctx.lineTo(refractedArrowX - 8 * Math.cos(refractedArrowAngle + Math.PI / 6), refractedArrowY - 8 * Math.sin(refractedArrowAngle + Math.PI / 6));
         ctx.fill();
         
         // Draw normal line
@@ -1417,16 +1451,17 @@ function initRefractionExperiment() {
         ctx.lineWidth = 1;
         ctx.setLineDash([5, 5]);
         ctx.beginPath();
-        ctx.moveTo(centerX, centerY - 100);
-        ctx.lineTo(centerX, centerY + 100);
+        ctx.moveTo(centerX, rayEndY - 100);
+        ctx.lineTo(centerX, rayEndY + 100);
         ctx.stroke();
         ctx.setLineDash([]);
         
         // Labels
         ctx.fillStyle = '#cbd5e1';
         ctx.font = '14px Poppins';
-        ctx.fillText('Incident Ray', startX - 50, startY - 10);
-        ctx.fillText('Refracted Ray', endX + 10, endY);
+        ctx.fillText('Light Source', startX - 40, startY - 20);
+        ctx.fillText('Incident Ray', centerX - 80, rayEndY - 30);
+        ctx.fillText('Refracted Ray', refractedEndX + 10, refractedEndY);
         ctx.fillText('Air (n=1.0)', centerX - 200, centerY - 50);
         ctx.fillText(`Material (n=${n2})`, centerX - 200, centerY + 50);
     }
