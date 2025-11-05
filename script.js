@@ -1183,15 +1183,15 @@ function createPHExperiment() {
         </div>
         <div class="controls">
             <select id="ph-substance" class="control-group" style="padding: 0.8rem; border-radius: 10px; background: var(--card-bg); color: var(--text-primary); border: 2px solid var(--primary-color);">
-                <option value="0">Battery Acid (pH 0)</option>
-                <option value="2">Lemon Juice (pH 2)</option>
-                <option value="4">Tomato Juice (pH 4)</option>
-                <option value="6">Coffee (pH 6)</option>
-                <option value="7">Pure Water (pH 7)</option>
-                <option value="8">Sea Water (pH 8)</option>
-                <option value="10">Soap (pH 10)</option>
-                <option value="12">Bleach (pH 12)</option>
-                <option value="14">Sodium Hydroxide (pH 14)</option>
+                <option value="0">Battery Acid</option>
+                <option value="2">Lemon Juice</option>
+                <option value="4">Tomato Juice</option>
+                <option value="6">Coffee</option>
+                <option value="7">Pure Water</option>
+                <option value="8">Sea Water</option>
+                <option value="10">Soap</option>
+                <option value="12">Bleach</option>
+                <option value="14">Sodium Hydroxide</option>
             </select>
             <button class="control-btn" id="ph-test">Test pH</button>
         </div>
