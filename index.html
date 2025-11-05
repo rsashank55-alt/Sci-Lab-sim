@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Science Lab Simulator - Interactive Learning</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <span class="logo-icon">🔬</span>
+                <span class="logo-text">Science Lab</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#home" class="nav-link active">Home</a></li>
+                <li><a href="#experiments" class="nav-link">Experiments</a></li>
+                <li><a href="#about" class="nav-link">About</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Home Section -->
+    <section id="home" class="home-section">
+        <div class="home-container">
+            <div class="home-content">
+                <h1 class="home-title">
+                    <span class="title-word">Welcome to</span>
+                    <span class="title-word gradient-text">Science Lab Simulator</span>
+                </h1>
+                <p class="home-subtitle">Explore Physics & Chemistry through Interactive Experiments</p>
+                <div class="home-buttons">
+                    <button class="btn btn-primary" onclick="scrollToExperiments()">
+                        <span>Start Exploring</span>
+                        <span class="btn-icon">→</span>
+                    </button>
+                    <button class="btn btn-secondary" onclick="showAbout()">
+                        <span>Learn More</span>
+                    </button>
+                </div>
+            </div>
+            <div class="home-visual">
+                <div class="floating-elements">
+                    <div class="floating-element element-1">⚛️</div>
+                    <div class="floating-element element-2">🔬</div>
+                    <div class="floating-element element-3">🧪</div>
+                    <div class="floating-element element-4">⚡</div>
+                    <div class="floating-element element-5">🌊</div>
+                    <div class="floating-element element-6">🔥</div>
+                </div>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <div class="mouse"></div>
+        </div>
+    </section>
+
+    <!-- Experiments Section -->
+    <section id="experiments" class="experiments-section">
+        <div class="container">
+            <h2 class="section-title">Interactive Experiments</h2>
+            <p class="section-subtitle">Choose an experiment to explore</p>
+            
+            <!-- Experiment Cards Grid -->
+            <div class="experiments-grid">
+                <!-- Physics Experiments -->
+                <div class="experiment-card" data-experiment="gravity">
+                    <div class="card-icon">🌍</div>
+                    <h3>Gravity & Motion</h3>
+                    <p>Explore how objects fall and move under gravity</p>
+                    <button class="card-btn">Start Experiment</button>
+                </div>
+
+                <div class="experiment-card" data-experiment="pendulum">
+                    <div class="card-icon">⏰</div>
+                    <h3>Pendulum Motion</h3>
+                    <p>Study the oscillation of a simple pendulum</p>
+                    <button class="card-btn">Start Experiment</button>
+                </div>
+
+                <div class="experiment-card" data-experiment="wave">
+                    <div class="card-icon">🌊</div>
+                    <h3>Wave Motion</h3>
+                    <p>Visualize wave propagation and interference</p>
+                    <button class="card-btn">Start Experiment</button>
+                </div>
+
+                <div class="experiment-card" data-experiment="circuit">
+                    <div class="card-icon">⚡</div>
+                    <h3>Electric Circuit</h3>
+                    <p>Build and test electrical circuits</p>
+                    <button class="card-btn">Start Experiment</button>
+                </div>
+
+                <!-- Chemistry Experiments -->
+                <div class="experiment-card" data-experiment="reaction">
+                    <div class="card-icon">🧪</div>
+                    <h3>Chemical Reactions</h3>
+                    <p>Observe colorful chemical reactions</p>
+                    <button class="card-btn">Start Experiment</button>
+                </div>
+
+                <div class="experiment-card" data-experiment="molecules">
+                    <div class="card-icon">⚛️</div>
+                    <h3>Molecular Structure</h3>
+                    <p>Explore 3D molecular models</p>
+                    <button class="card-btn">Start Experiment</button>
+                </div>
+
+                <div class="experiment-card" data-experiment="states">
+                    <div class="card-icon">❄️</div>
+                    <h3>States of Matter</h3>
+                    <p>See how matter changes states</p>
+                    <button class="card-btn">Start Experiment</button>
+                </div>
+
+                <div class="experiment-card" data-experiment="ph">
+                    <div class="card-icon">🧬</div>
+                    <h3>pH Scale</h3>
+                    <p>Test acidity and alkalinity</p>
+                    <button class="card-btn">Start Experiment</button>
+                </div>
+
+                <!-- Additional Physics Experiments -->
+                <div class="experiment-card" data-experiment="refraction">
+                    <div class="card-icon">💡</div>
+                    <h3>Light Refraction</h3>
+                    <p>See how light bends through different materials</p>
+                    <button class="card-btn">Start Experiment</button>
+                </div>
+
+                <div class="experiment-card" data-experiment="magnetic">
+                    <div class="card-icon">🧲</div>
+                    <h3>Magnetic Field</h3>
+                    <p>Visualize magnetic field lines and interactions</p>
+                    <button class="card-btn">Start Experiment</button>
+                </div>
+
+                <div class="experiment-card" data-experiment="sound">
+                    <div class="card-icon">🔊</div>
+                    <h3>Sound Waves</h3>
+                    <p>Explore sound propagation and frequency</p>
+                    <button class="card-btn">Start Experiment</button>
+                </div>
+
+                <div class="experiment-card" data-experiment="projectile">
+                    <div class="card-icon">🚀</div>
+                    <h3>Projectile Motion</h3>
+                    <p>Study the trajectory of launched objects</p>
+                    <button class="card-btn">Start Experiment</button>
+                </div>
+
+                <div class="experiment-card" data-experiment="friction">
+                    <div class="card-icon">🎯</div>
+                    <h3>Friction</h3>
+                    <p>Investigate how friction affects motion</p>
+                    <button class="card-btn">Start Experiment</button>
+                </div>
+
+                <!-- Additional Chemistry Experiments -->
+                <div class="experiment-card" data-experiment="periodic">
+                    <div class="card-icon">📊</div>
+                    <h3>Periodic Table</h3>
+                    <p>Explore elements and their properties</p>
+                    <button class="card-btn">Start Experiment</button>
+                </div>
+
+                <div class="experiment-card" data-experiment="optics">
+                    <div class="card-icon">🔍</div>
+                    <h3>Optics & Lenses</h3>
+                    <p>See how light focuses through lenses</p>
+                    <button class="card-btn">Start Experiment</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experiment Modal -->
+    <div id="experimentModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div id="experimentContainer"></div>
+        </div>
+    </div>
+
+    <!-- About Section -->
+    <section id="about" class="about-section">
+        <div class="container">
+            <h2 class="section-title">About Science Lab Simulator</h2>
+            <div class="about-content">
+                <div class="about-card">
+                    <div class="about-icon">🎓</div>
+                    <h3>Educational</h3>
+                    <p>Learn science concepts through hands-on experimentation</p>
+                </div>
+                <div class="about-card">
+                    <div class="about-icon">🎨</div>
+                    <h3>Visual Learning</h3>
+                    <p>Beautiful animations help you understand complex concepts</p>
+                </div>
+                <div class="about-card">
+                    <div class="about-icon">⚡</div>
+                    <h3>Interactive</h3>
+                    <p>Control experiments and see real-time results</p>
+                </div>
+                <div class="about-card">
+                    <div class="about-icon">🌍</div>
+                    <h3>International Grade</h3>
+                    <p>Professional quality experiments for all learners</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Science Lab Simulator. Built with ❤️ for learning.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
