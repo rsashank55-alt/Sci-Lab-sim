@@ -1,37 +1,98 @@
-// ===== Navigation & Mobile Menu =====
-const hamburger = document.querySelector('.hamburger');
-const navMenu = document.querySelector('.nav-menu');
-const navLinks = document.querySelectorAll('.nav-link');
-
-hamburger.addEventListener('click', () => {
-    hamburger.classList.toggle('active');
-    navMenu.classList.toggle('active');
+// ===== Wait for DOM to be ready =====
+document.addEventListener('DOMContentLoaded', function() {
+    initializeApp();
 });
 
-navLinks.forEach(link => {
-    link.addEventListener('click', () => {
-        hamburger.classList.remove('active');
-        navMenu.classList.remove('active');
-        
-        // Update active state
-        navLinks.forEach(l => l.classList.remove('active'));
-        link.classList.add('active');
+function initializeApp() {
+    // ===== Navigation & Mobile Menu =====
+    const hamburger = document.querySelector('.hamburger');
+    const navMenu = document.querySelector('.nav-menu');
+    const navLinks = document.querySelectorAll('.nav-link');
+
+    if (hamburger) {
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navMenu.classList.toggle('active');
+        });
+    }
+
+    navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            if (hamburger) {
+                hamburger.classList.remove('active');
+            }
+            if (navMenu) {
+                navMenu.classList.remove('active');
+            }
+            
+            // Update active state
+            navLinks.forEach(l => l.classList.remove('active'));
+            link.classList.add('active');
+        });
     });
-});
 
-// Smooth scroll for navigation
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-            target.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
+    // Smooth scroll for navigation
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+
+    // ===== Modal Management =====
+    const modal = document.getElementById('experimentModal');
+    const closeModal = document.querySelector('.close-modal');
+    const experimentCards = document.querySelectorAll('.experiment-card');
+
+    if (closeModal) {
+        closeModal.addEventListener('click', () => {
+            if (modal) {
+                modal.style.display = 'none';
+            }
+            stopAllAnimations();
+        });
+    }
+
+    window.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            modal.style.display = 'none';
+            stopAllAnimations();
+        }
+    });
+
+    // Handle clicks on experiment cards and buttons
+    experimentCards.forEach(card => {
+        // Click on the card itself
+        card.addEventListener('click', (e) => {
+            // Only trigger if not clicking on the button
+            if (!e.target.classList.contains('card-btn') && !e.target.closest('.card-btn')) {
+                const experimentType = card.getAttribute('data-experiment');
+                if (experimentType) {
+                    openExperiment(experimentType);
+                }
+            }
+        });
+        
+        // Also handle button clicks directly
+        const cardBtn = card.querySelector('.card-btn');
+        if (cardBtn) {
+            cardBtn.addEventListener('click', (e) => {
+                e.stopPropagation(); // Prevent card click from firing
+                e.preventDefault();
+                const experimentType = card.getAttribute('data-experiment');
+                if (experimentType) {
+                    openExperiment(experimentType);
+                }
             });
         }
     });
-});
+}
 
 // ===== Scroll Functions =====
 function scrollToExperiments() {
@@ -45,30 +106,6 @@ function showAbout() {
         behavior: 'smooth'
     });
 }
-
-// ===== Modal Management =====
-const modal = document.getElementById('experimentModal');
-const closeModal = document.querySelector('.close-modal');
-const experimentCards = document.querySelectorAll('.experiment-card');
-
-closeModal.addEventListener('click', () => {
-    modal.style.display = 'none';
-    stopAllAnimations();
-});
-
-window.addEventListener('click', (e) => {
-    if (e.target === modal) {
-        modal.style.display = 'none';
-        stopAllAnimations();
-    }
-});
-
-experimentCards.forEach(card => {
-    card.addEventListener('click', () => {
-        const experimentType = card.getAttribute('data-experiment');
-        openExperiment(experimentType);
-    });
-});
 
 function openExperiment(type) {
     modal.style.display = 'block';
@@ -2357,15 +2394,17 @@ function initOpticsExperiment() {
     drawOptics();
 }
 
-// Initialize on page load
+// Initialize scroll effects on page load
 document.addEventListener('DOMContentLoaded', () => {
     // Add scroll effects
     window.addEventListener('scroll', () => {
         const navbar = document.querySelector('.navbar');
-        if (window.scrollY > 50) {
-            navbar.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.3)';
-        } else {
-            navbar.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
+        if (navbar) {
+            if (window.scrollY > 50) {
+                navbar.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.3)';
+            } else {
+                navbar.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
+            }
         }
     });
 });
