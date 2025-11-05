@@ -1475,25 +1475,33 @@ function initRefractionExperiment() {
             // Add animated light particles
             const centerX = canvas.width / 2;
             const centerY = canvas.height / 2;
+            const lightSourceX = 50;
+            const lightSourceY = centerY;
             const angleIncident = parseFloat(angleSlider.value) * Math.PI / 180;
             const n2 = parseFloat(materialSelect.value);
-            const sinRefracted = (1.0 / n2) * Math.sin(angleIncident);
-            const angleRefracted = Math.asin(Math.min(1, sinRefracted));
+            
+            // Calculate ray path
+            const rayDistance = centerX - lightSourceX;
+            const rayEndY = lightSourceY - Math.tan(angleIncident) * rayDistance;
+            const actualAngle = Math.atan2(lightSourceY - rayEndY, centerX - lightSourceX);
+            const sinRefracted = (1.0 / n2) * Math.sin(actualAngle);
+            const angleRefracted = Math.asin(Math.min(1, Math.abs(sinRefracted)));
             
             for (let i = 0; i < 5; i++) {
                 const progress = (frame + i * 10) % 400 / 400;
                 if (progress < 0.5) {
-                    // Incident ray particles
-                    const x = centerX - 250 + progress * 500;
-                    const y = centerY - (250 * Math.sin(angleIncident)) * progress * 2;
+                    // Incident ray particles from light source
+                    const x = lightSourceX + (centerX - lightSourceX) * progress * 2;
+                    const y = lightSourceY - Math.tan(angleIncident) * (x - lightSourceX);
                     ctx.fillStyle = '#fbbf24';
                     ctx.beginPath();
                     ctx.arc(x, y, 4, 0, Math.PI * 2);
                     ctx.fill();
                 } else {
                     // Refracted ray particles
-                    const x = centerX + (progress - 0.5) * 400 * Math.cos(angleRefracted);
-                    const y = centerY + (progress - 0.5) * 400 * Math.sin(angleRefracted);
+                    const refractedProgress = (progress - 0.5) * 2;
+                    const x = centerX + refractedProgress * 200 * Math.cos(angleRefracted);
+                    const y = rayEndY + refractedProgress * 200 * Math.sin(angleRefracted);
                     ctx.fillStyle = '#ec4899';
                     ctx.beginPath();
                     ctx.arc(x, y, 4, 0, Math.PI * 2);
