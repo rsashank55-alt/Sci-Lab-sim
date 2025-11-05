@@ -1,5 +1,5 @@
 import { Experiment } from '../types'
-import { Beaker, FlaskConical, Atom, Zap, Waves, Gauge, TestTube, Droplets } from 'lucide-react'
+import { Beaker, Atom, Zap, Waves, Gauge, TestTube, Droplets } from 'lucide-react'
 
 interface HomePageProps {
   onSelectExperiment: (experiment: Experiment) => void
