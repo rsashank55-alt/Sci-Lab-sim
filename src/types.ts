@@ -1,11 +1,10 @@
+import { LucideIcon } from 'lucide-react'
+
 export interface Experiment {
   id: string
-  title: string
-  category: 'physics' | 'chemistry'
-  description: string
-  icon: string
-  color: string
-  component: React.ComponentType<ExperimentProps>
+  name: string
+  category: 'Physics' | 'Chemistry'
+  icon: LucideIcon
 }
 
 export interface ExperimentProps {
